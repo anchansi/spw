@@ -28,7 +28,7 @@ public class GameEngine implements KeyListener, GameReporter{
 		
 		gp.sprites.add(v);
 		
-		timer = new Timer(50, new ActionListener() {
+		timer = new Timer(30, new ActionListener() {  								//50
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -50,7 +50,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 	
 	private void process(){
-		if(Math.random() < difficulty){
+		if(Math.random() >= difficulty){                       //<
 			generateEnemy();
 		}
 		
@@ -86,10 +86,10 @@ public class GameEngine implements KeyListener, GameReporter{
 	void controlVehicle(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_LEFT:
-			v.move(-1);
+			v.move((int)(Math.random()*390));						//-1
 			break;
 		case KeyEvent.VK_RIGHT:
-			v.move(1);
+			v.move((int)(Math.random()*390));												//1
 			break;
 		case KeyEvent.VK_D:
 			difficulty += 0.1;
