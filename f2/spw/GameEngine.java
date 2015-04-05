@@ -18,7 +18,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	private SpaceShip v;	
 	
 	private Timer timer;
-	
+	public int move_enermy = 0;				
 	private long score = 0;
 	private double difficulty = 0.1;
 	
@@ -44,18 +44,17 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 	
 	private void generateEnemy(){
-		
-		for(int i = 0;i<400 ;i++){
-				Enemy e = new Enemy(i,(int)(Math.random()*390)); 						//(Math.random()*390), 30)
-		
+																						
+		 // for(int i = 0;i<400 ;i++){
+				Enemy e = new Enemy(move_enermy,20); 						//(Math.random()*390), 30)
 				gp.sprites.add(e);
 				enemies.add(e);
-		}
-	}
-		 
-	
+		 // }
+	}	
+
+
 	private void process(){
-		if(Math.random() >= difficulty){                       //<
+		if(Math.random() < difficulty){                       
 			generateEnemy();
 		}
 		
@@ -67,7 +66,7 @@ public class GameEngine implements KeyListener, GameReporter{
 			if(!e.isAlive()){
 				e_iter.remove();
 				gp.sprites.remove(e);
-				score += 100;
+				score += 1;
 			}
 		}
 		
@@ -78,7 +77,9 @@ public class GameEngine implements KeyListener, GameReporter{
 		for(Enemy e : enemies){
 			er = e.getRectangle();
 			if(er.intersects(vr)){
-				score += 100;												//die();												//return;
+				
+				score +=1;
+				//die();												//return;
 			}
 		}
 	}
@@ -90,14 +91,35 @@ public class GameEngine implements KeyListener, GameReporter{
 	void controlVehicle(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_LEFT:
-			v.move(-1);						//-1
+			v.moveLR(-1);						//-1
 			break;
 		case KeyEvent.VK_RIGHT:
-			v.move(1);												//1
+			v.moveLR(1);												//1
 			break;
 		case KeyEvent.VK_D:
 			difficulty += 0.1;
 			break;
+		 case KeyEvent.VK_UP:
+		 	v.moveUD(-1);						//-1
+		 	break;
+		 case KeyEvent.VK_DOWN:
+		 	v.moveUD(1);						//-1
+		 	break;
+		case KeyEvent.VK_Z:
+		 	die();	
+		 	break;					//time stop
+		 case KeyEvent.VK_X:
+		 	start();	
+		 	break;						//time play
+		 case KeyEvent.VK_R:
+		 	score = 0;						//resetscore
+		 	break;
+		 case KeyEvent.VK_S:
+		 	move_enermy +=10;
+		 	break;
+		 case KeyEvent.VK_A:
+		 	move_enermy -=10;
+		 	break;
 		}
 	}
 
