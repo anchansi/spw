@@ -4,15 +4,15 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-public class Enemy extends Sprite{
+public class Line extends Sprite{
 	public static final int Y_TO_FADE = 400;
 	public static final int Y_TO_DIE = 600;
 	
 	private int step = 1;
 	private boolean alive = true;
 	
-	public Enemy(int x, int y) {
-		super(x, y, 5, 5); 																		//5,10
+	public Line(int x, int y) {
+		super(x, y, 10, 10); 																		//5,10
 		
 	}
 
@@ -25,10 +25,7 @@ public class Enemy extends Sprite{
 					(float)(Y_TO_DIE - y)/(Y_TO_DIE - Y_TO_FADE)));
 		}
 
-		if((int)(Math.random()*2) == 0)	
-			g.setColor(Color.orange);			
-		else
-			g.setColor(Color.white);														//red
+		g.setColor(Color.gray);													//red
 		g.fillRect(x, y, width, height);
 
 		

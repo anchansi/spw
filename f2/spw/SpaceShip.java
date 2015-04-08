@@ -24,7 +24,8 @@ public class SpaceShip extends Sprite{
 		if(x < 0)
 			x = 0;
 		if(x > 400 - width)
-			x = 400 - width;
+		 	x = 400 - width;
+
 	}
 	public void moveUD(int direction){
 		y += (step * direction);
@@ -34,4 +35,5 @@ public class SpaceShip extends Sprite{
 			y = 600 - width;
 	}
 
+	
 }
