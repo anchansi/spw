@@ -53,36 +53,44 @@ public class GameEngine implements KeyListener, GameReporter{
 		  
 	}	
 	private void generateLine(){
-			   for(int i=0;i<10;i++){		
-			
-
-					Line w = new Line(i+move_line,1); 
+			     // for(int i=0;i<2;i++){		
+					
+					Line w = new Line(moveline(),1); 
 					gp.sprites.add(w);
 					lines.add(w);			//(Math.random()*390), 30) 
 					
 				
-					Line p = new Line(i+move_line+60,1); 
+					Line p = new Line(moveline()+300,1); 
 					gp.sprites.add(p);
 					lines.add(p);			//(Math.random()*390), 30) 
-					
 				
-				
-				
-				
-			  }
+			    //}
 		  
 	}	
 
+	private int moveline(){
+		int n = (int)(Math.random()*2);
+		if(n == 0 && move_line < 400)
+			move_line += 2;
+		if(n == 1 && move_line > 0)
+			move_line -= 2;
+		if(move_line > 400)
+			move_line -= 2;
+		if(move_line < 0)
+			move_line += 2;
+		return move_line;
 
+	}
 
 	private void process(){
 		if(Math.random() < difficulty){                       
 			generateEnemy();
 		}
-		// if(Math.random() < difficulty){                       
-		generateLine();
+		  // if(Math.random() > difficulty){                       
+	
+				generateLine();
 		
-		// }
+		  // }
 		
 		Iterator<Enemy> e_iter = enemies.iterator();
 		Iterator<Line> p_iter = lines.iterator();
@@ -171,12 +179,12 @@ public class GameEngine implements KeyListener, GameReporter{
 		 case KeyEvent.VK_R:
 		 	score = 0;						//resetscore
 		 	break;
-		 case KeyEvent.VK_S:
-		 	move_line +=10;
-		 	break;						//control enermy
-		 case KeyEvent.VK_A:
-		 	move_line -=10;
-		 	break;
+		 // case KeyEvent.VK_S:
+		 // 	move_line +=10;
+		 // 	break;						//control enermy
+		 // case KeyEvent.VK_A:
+		 // 	move_line -=10;
+		 // 	break;
 		}
 	}
 

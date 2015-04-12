@@ -6,6 +6,16 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+//*****
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+//*****
+
+
+
+
+
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
@@ -15,9 +25,10 @@ public class GamePanel extends JPanel {
 	ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 
 	public GamePanel() {
-		bi = new BufferedImage(400, 600, BufferedImage.TYPE_INT_ARGB);
+
+		 bi = new BufferedImage(400, 600, BufferedImage.TYPE_INT_ARGB);
 		big = (Graphics2D) bi.getGraphics();
-		big.setBackground(Color.black);										//black
+		 big.setBackground(Color.blue);										//black
 	}
 
 	public void updateGameUI(GameReporter reporter){

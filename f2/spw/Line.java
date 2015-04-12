@@ -8,11 +8,11 @@ public class Line extends Sprite{
 	public static final int Y_TO_FADE = 400;
 	public static final int Y_TO_DIE = 600;
 	
-	private int step = 1;
+	private int step = 4;
 	private boolean alive = true;
 	
 	public Line(int x, int y) {
-		super(x, y, 10, 10); 																		//5,10
+		super(x, y, 180, 100); 																		//5,10
 		
 	}
 
@@ -25,7 +25,7 @@ public class Line extends Sprite{
 					(float)(Y_TO_DIE - y)/(Y_TO_DIE - Y_TO_FADE)));
 		}
 
-		g.setColor(Color.gray);													//red
+		g.setColor(Color.green);													//red
 		g.fillRect(x, y, width, height);
 
 		
