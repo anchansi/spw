@@ -20,8 +20,8 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	private Timer timer;
 	public int move_line = 0;				
-	private long score = 0;
-	private double difficulty = 0.1;
+	private long score = 1;
+	private double difficulty = 0.3;
 	
 	public GameEngine(GamePanel gp, SpaceShip v) {
 		this.gp = gp;
@@ -60,7 +60,7 @@ public class GameEngine implements KeyListener, GameReporter{
 					lines.add(w);			//(Math.random()*390), 30) 
 					
 				
-					Line p = new Line(moveline()+300,1); 
+					Line p = new Line(moveline()+300,20); 
 					gp.sprites.add(p);
 					lines.add(p);			//(Math.random()*390), 30) 
 				
@@ -83,17 +83,16 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 
 	private void process(){
+		generateLine();
+		
 		if(Math.random() < difficulty){                       
 			generateEnemy();
-		}
-		  // if(Math.random() > difficulty){                       
-	
-				generateLine();
+		}            
 		
-		  // }
 		
 		Iterator<Enemy> e_iter = enemies.iterator();
 		Iterator<Line> p_iter = lines.iterator();
+
 		while(e_iter.hasNext()){
 			Enemy e = e_iter.next();
 			e.proceed();
@@ -101,7 +100,7 @@ public class GameEngine implements KeyListener, GameReporter{
 			if(!e.isAlive()){
 				e_iter.remove();
 				gp.sprites.remove(e);
-				score += 1;
+				
 			}
 			
 			
@@ -112,7 +111,7 @@ public class GameEngine implements KeyListener, GameReporter{
 				if(!p.isAlive()){
 					p_iter.remove();
 					gp.sprites.remove(p);
-					score += 0.5;
+					
 				}
 		}
 		gp.updateGameUI(this);
@@ -123,16 +122,21 @@ public class GameEngine implements KeyListener, GameReporter{
 			er = e.getRectangle();
 			if(er.intersects(vr)){
 				
-				score +=1;
-				//die();												//return;
+				gp.sprites.remove(e);
+				score +=10;
+																
 			}
 		}
 		
+		
+
+
+
 		Rectangle2D.Double pr;
 		for(Line p : lines){
 			pr = p.getRectangle();
 			if(pr.intersects(vr)){
-				score -=5;											//return;
+				score -=1;											
 			}
 		}
 	}
@@ -141,50 +145,35 @@ public class GameEngine implements KeyListener, GameReporter{
 		timer.stop();
 	}
 	
-	// public void move(int n){
-		
-	// 		if((int)(Math.random()*4) < 2){
-	// 			v.moveLR(-1);
-			
-	// 		}
-	// 		else{
-	// 			v.moveLR(1);
-			
-	// 		}
-		
+
 	
 	void controlVehicle(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_LEFT:
-			v.moveLR(-1);						//-1
+			v.moveLR(-1);						
 			break;
 		case KeyEvent.VK_RIGHT:
-			v.moveLR(1);												//1
+			v.moveLR(1);												
 			break;
 		case KeyEvent.VK_D:
 			difficulty += 0.1;
 			break;
 		 case KeyEvent.VK_UP:
 		 	v.moveUD(-1);
-		 	break;						//-1
+		 	break;						
 		 case KeyEvent.VK_DOWN:
-		 	 v.moveUD(1);						//-1
+		 	 v.moveUD(1);						
 		 	break;
 		case KeyEvent.VK_Z:
 		 	die();	
-		 	break;					//time stop
+		 	break;					
 		 case KeyEvent.VK_X:
 		 	start();	
 		 	break;						//time play
 		 case KeyEvent.VK_R:
 		 	score = 0;						//resetscore
 		 	break;
-		 // case KeyEvent.VK_S:
-		 // 	move_line +=10;
-		 // 	break;						//control enermy
-		 // case KeyEvent.VK_A:
-		 // 	move_line -=10;
-		 // 	break;
+		 
 		}
 	}
 

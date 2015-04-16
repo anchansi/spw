@@ -12,17 +12,22 @@ import javax.imageio.ImageIO;
 public class SpaceShip extends Sprite{
 
 	int step = 20;
-	BufferedImage car;
+	BufferedImage boat;
+
 	public SpaceShip(int x, int y, int width, int height) {
 		super(x, y, width, height);
 
-		try{
-			car = ImageIO.read(new File("f2/image/boat.png"));
-		}
-		catch(IOException d){
 
-		}
+			try{
+				boat = ImageIO.read(new File("f2/image/boat.png"));
+			}
+			catch(IOException d){
+
+			}
 		
+		
+		
+
 	}
 
 	@Override
@@ -30,7 +35,7 @@ public class SpaceShip extends Sprite{
 		// g.setColor(Color.red);							//blue
 		// g.fillRect(x, y, width, height);
 
-		g.drawImage(car,x,y,width,height,null);
+		g.drawImage(boat,x,y,width,height,null);
 		
 	}
 
