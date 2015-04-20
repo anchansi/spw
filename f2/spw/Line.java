@@ -4,15 +4,28 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
 public class Line extends Sprite{
 	public static final int Y_TO_FADE = 400;
 	public static final int Y_TO_DIE = 600;
 	
+	BufferedImage line;
+
 	private int step = 4;
 	private boolean alive = true;
 	
 	public Line(int x, int y) {
-		super(x, y, 180, 100); 																		//5,10
+		super(x, y, 50, 40); 	
+		try{
+				line = ImageIO.read(new File("f2/image/red.jpg"));
+		}
+		catch(IOException d){
+
+		}																	//5,10
 		
 	}
 
@@ -25,8 +38,10 @@ public class Line extends Sprite{
 					(float)(Y_TO_DIE - y)/(Y_TO_DIE - Y_TO_FADE)));
 		}
 
-		g.setColor(Color.green);													//red
-		g.fillRect(x, y, width, height);
+		// g.setColor(Color.green);													//red
+		// g.fillRect(x, y, width, height);
+
+			g.drawImage(line,x,y,width,height,null);
 
 		
 	}
