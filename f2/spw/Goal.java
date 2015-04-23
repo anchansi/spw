@@ -11,26 +11,26 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 
-public class Shark extends Sprite{
+public class Goal extends Sprite{
 	public static final int Y_TO_FADE = 400;
 	public static final int Y_TO_DIE = 600;
 	
-	private int step = 8;
+	private int step = 5;
 	private boolean alive = true;
 	
-	BufferedImage b;
+	 BufferedImage goal;
 
 
 	
 
-	public Shark(int x, int y){
-		 super(x, y, 50, 100); 																		//5,10
-		try{
-				b = ImageIO.read(new File("f2/image/storm.png"));
-		}
-		catch(IOException d){
+	public Goal(int x, int y){
+		 super(x, y, 90, 80); 																		//5,10
+		 try{
+		 		goal = ImageIO.read(new File("f2/image/start.png"));
+		 }
+		 catch(IOException d){
 
-		}
+		 }
 	}
 
 	@Override
@@ -42,28 +42,23 @@ public class Shark extends Sprite{
 					(float)(Y_TO_DIE - y)/(Y_TO_DIE - Y_TO_FADE)));
 		}
 
-		// if((int)(Math.random()*2) == 0)	
-		// 	g.setColor(Color.orange);			
-		// else
-		// 	g.setColor(Color.white);														//red
+		
+		// g.setColor(Color.orange);																	//red
 		// g.fillRect(x, y, width, height);
 
-		g.drawImage(b,x,y,width,height,null);
+		 g.drawImage(goal,x,y,width,height,null);
 	}
 		
 
 	public void proceed(){
-		
-		
-		x += step;
-		
-		if(y > Y_TO_DIE){
-			alive = false;
-		}
+	
+		  if (x > 0 )
+		 	x -= step;
 
-		else if(x > Y_TO_FADE){
-			alive = false;
-		}
+		  if (x == 0 )
+			x = 400;
+
+		
 	}
 	
 	public boolean isAlive(){

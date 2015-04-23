@@ -17,10 +17,14 @@ public class GameEngine implements KeyListener, GameReporter{
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
 	private ArrayList<Line> lines = new ArrayList<Line>();
 	private ArrayList<Shark> sharks = new ArrayList<Shark>();
-	private SpaceShip v;	
+	private SpaceShip v;
+	private ArrayList<Goal> goals = new ArrayList<Goal>(); 
+
+							//
 	
 	private Timer timer;
-	public int move_line = 0;				
+	public int move_line = 0;	
+	public int move_line2 = 0;			
 	private long score = 0;
 	private double difficulty = 0.3;
 	
@@ -28,13 +32,17 @@ public class GameEngine implements KeyListener, GameReporter{
 		this.gp = gp;
 		this.v = v;		
 		
-		gp.sprites.add(v);
+
+		 gp.sprites.add(v);
+
+
 		
 		timer = new Timer(20, new ActionListener() {  								//50
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				process();
+				
 			}
 		});
 		timer.setRepeats(true);
@@ -48,20 +56,29 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	private void generateEnemy(){
 																						
-				Enemy e = new Enemy((int)(Math.random()*390),5); 						//(Math.random()*390), 30)
+				Enemy e = new Enemy((int)(Math.random()*390),70); 						//(Math.random()*390), 30)
 				gp.sprites.add(e);
 				enemies.add(e);
 		  
 	}	
+
+	
+
 	private void generateLine(){
 			     // for(int i=0;i<2;i++){		
 					
-					Line w = new Line(moveline()+(int)(Math.random()*20),0); 
+					Line w = new Line(moveline()+(int)(Math.random()*20),70); 
 					gp.sprites.add(w);
 					lines.add(w);			//(Math.random()*390), 30) 
 					
 				
-					Line p = new Line(moveline()+300+(int)(Math.random()*20),20); 
+		  
+	}	
+	private void generateLine2(){
+		
+					
+				
+					Line p = new Line(moveline2()+200+(int)(Math.random()*40),70); 
 					gp.sprites.add(p);
 					lines.add(p);			//(Math.random()*390), 30) 
 				
@@ -77,6 +94,15 @@ public class GameEngine implements KeyListener, GameReporter{
 			  
 	}	
 
+	private void generateGoal(){
+																							
+					Goal gg = new Goal(200,0); 						//(Math.random()*390), 30)
+					gp.sprites.add(gg);
+					goals.add(gg);
+			  
+	}	
+	
+
 	private int moveline(){
 		int n = (int)(Math.random()*2);
 		if(n == 0 && move_line < 400)
@@ -91,6 +117,20 @@ public class GameEngine implements KeyListener, GameReporter{
 
 	}
 
+	private int moveline2(){
+		int n = (int)(Math.random()*2);
+		if(n == 0 && move_line2 < 400)
+			move_line2 += 1;
+		if(n == 1 && move_line2 > 0)
+			move_line2 -= 1;
+		if(move_line2 > 300)
+			move_line2 -= 4;
+		if(move_line2 < 0)
+			move_line2 += 4;
+		return move_line2;
+
+	}
+
 	private void process(){
 		
 		long sh = getScore();
@@ -99,18 +139,24 @@ public class GameEngine implements KeyListener, GameReporter{
 		if( sh%10 > 5 || sh%10 == 7)
 			generateLine();
 		
+		if( sh%10 > 3 || sh%10 == 7)
+			generateLine2();
+
 		if(Math.random() < difficulty){                       
 			generateEnemy();
 		}  
-		if(sh < 10){                       
+		if(sh < 5 && sh != 0){                       
 			generateShark();
 		}           
 		
+		if(getScore() == 1)
+				generateGoal();
 		
 		Iterator<Enemy> e_iter = enemies.iterator();
 		Iterator<Line> p_iter = lines.iterator();
+		Iterator<Line> w_iter = lines.iterator();
 		Iterator<Shark> s_iter = sharks.iterator();
-
+		Iterator<Goal> g_iter = goals.iterator();
 		while(e_iter.hasNext()){
 			Enemy e = e_iter.next();
 			e.proceed();
@@ -120,9 +166,21 @@ public class GameEngine implements KeyListener, GameReporter{
 				gp.sprites.remove(e);
 				
 			}
-			
+		
 			
 		}
+
+		while(g_iter.hasNext()){
+			Goal gg = g_iter.next();
+				gg.proceed();
+				if(!gg.isAlive()){
+					g_iter.remove();
+					gp.sprites.remove(gg);
+					
+				}
+		}
+
+
 		while(p_iter.hasNext()){
 			Line p = p_iter.next();
 				p.proceed();
@@ -133,19 +191,39 @@ public class GameEngine implements KeyListener, GameReporter{
 				}
 		}
 
+
+		
+
 		while(s_iter.hasNext()){
 			Shark s = s_iter.next();
 				s.proceed();
 				if(!s.isAlive()){
 					s_iter.remove();
-					gp.sprites.remove(s);
-					
+					gp.sprites.remove(s);	
 				}
+
 		}
+
+
 
 		gp.updateGameUI(this);
 		
 		Rectangle2D.Double vr = v.getRectangle();
+		
+		
+		Rectangle2D.Double gr;
+		for(Goal g : goals){
+			gr = g.getRectangle();
+			if(gr.intersects(vr)){
+				
+				timer.stop();
+																
+			}
+		}
+		
+
+
+
 		Rectangle2D.Double er;
 		for(Enemy e : enemies){
 			er = e.getRectangle();
@@ -156,28 +234,46 @@ public class GameEngine implements KeyListener, GameReporter{
 																
 			}
 		}
+		 
 		
-		
-
-
-
 		Rectangle2D.Double pr;
+		Rectangle2D.Double sr;
+
+
+		for(Shark s : sharks){
+			sr = s.getRectangle();
+			if(sr.intersects(vr)){
+				die();											
+			}
+			
+
+			
+		}
+
+
+
+		// for(Line w : lines){
+		// 	wr = w.getRectangle();
+		// 	if(vr.intersects(wr)){
+		// 		v.moveLR(1);	
+		// 		score -= 10;									
+		// 	}
+			
+	
+			
+		// }
+	
 		for(Line p : lines){
 			pr = p.getRectangle();
 			if(pr.intersects(vr)){
 				v.moveLR(1);	
 				score -= 10;										
 			}
+
+			
 		}
 
-		Rectangle2D.Double sr;
-				for(Shark s : sharks){
-					sr = s.getRectangle();
-					if(sr.intersects(vr)){
-						die();											
-					}
-				}
-
+		
 
 	}
 	
