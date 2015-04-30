@@ -17,9 +17,12 @@ public class Line extends Sprite{
 
 	private int step = 4;
 	private boolean alive = true;
+
+	
 	
 	public Line(int x, int y) {
-		super(x, y, 50, 40); 	
+		
+		super(x, y, (int)(Math.random()*10)*10, (int)(Math.random()*10)*10); 	
 		try{
 				line = ImageIO.read(new File("f2/image/red.jpg"));
 		}

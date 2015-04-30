@@ -56,4 +56,11 @@ public class SpaceShip extends Sprite{
 	}
 
 	
+	public int movex(){
+		return x;
+	}
+	public int movey(){
+		return y;
+	}
+	
 }

@@ -26,14 +26,20 @@ public class GamePanel extends JPanel {
 
 	public GamePanel() {
 
-		 bi = new BufferedImage(400, 600, BufferedImage.TYPE_INT_ARGB);
+		bi = new BufferedImage(400, 600, BufferedImage.TYPE_INT_ARGB);
 		big = (Graphics2D) bi.getGraphics();
-		 big.setBackground(Color.blue);										//black
+		  big.setBackground(Color.BLUE);	
+
+		//  try{
+		// 		bi = ImageIO.read(new File("f2/image/fish.png"));
+		// }
+		// catch(IOException d){
+
+		// }									//black
 	}
 
 	public void updateGameUI(GameReporter reporter){
 		big.clearRect(0, 0, 400, 600);
-		
 		big.setColor(Color.white);		
 		big.drawString(String.format("%08d", reporter.getScore()), 300, 20);
 		for(Sprite s : sprites){

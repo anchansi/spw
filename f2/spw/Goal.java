@@ -14,7 +14,7 @@ import javax.imageio.ImageIO;
 public class Goal extends Sprite{
 	public static final int Y_TO_FADE = 400;
 	public static final int Y_TO_DIE = 600;
-	
+	public int a = 1;
 	private int step = 5;
 	private boolean alive = true;
 	
@@ -52,13 +52,33 @@ public class Goal extends Sprite{
 
 	public void proceed(){
 	
-		  if (x > 0 )
-		 	x -= step;
-
-		  if (x == 0 )
-			x = 400;
-
 		
+	
+		  if (x < 0 ){
+		 	a = 1;
+		 	
+		 }
+		  else if (a ==0 ){
+			x += step;
+		}
+
+		else if (x > 0 && a == 1 && x < 400){
+			x += step;
+		}
+
+		else if(x > 0 && x > 400){
+			
+			a = 0; 
+		}
+
+
+		else if(a == 0){
+			
+			x -= step; 
+		}
+
+
+
 	}
 	
 	public boolean isAlive(){

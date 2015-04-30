@@ -19,6 +19,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	private ArrayList<Shark> sharks = new ArrayList<Shark>();
 	private SpaceShip v;
 	private ArrayList<Goal> goals = new ArrayList<Goal>(); 
+	private ArrayList<Bomb> bombs = new ArrayList<Bomb>(); 
 
 							//
 	
@@ -33,7 +34,7 @@ public class GameEngine implements KeyListener, GameReporter{
 		this.v = v;		
 		
 
-		 gp.sprites.add(v);
+		  gp.sprites.add(v);
 
 
 		
@@ -62,12 +63,19 @@ public class GameEngine implements KeyListener, GameReporter{
 		  
 	}	
 
+	private void generateBomb(){
+																						
+				Bomb b = new Bomb(v.movex(),v.movey()); 						//(Math.random()*390), 30)
+				gp.sprites.add(b);
+				bombs.add(b);
+		  
+	}	
 	
 
 	private void generateLine(){
 			     // for(int i=0;i<2;i++){		
 					
-					Line w = new Line(moveline()+(int)(Math.random()*20),70); 
+					Line w = new Line(moveline()+(int)(Math.random()*20),70+(int)(Math.random()*20)); 
 					gp.sprites.add(w);
 					lines.add(w);			//(Math.random()*390), 30) 
 					
@@ -78,7 +86,7 @@ public class GameEngine implements KeyListener, GameReporter{
 		
 					
 				
-					Line p = new Line(moveline2()+200+(int)(Math.random()*40),70); 
+					Line p = new Line(moveline2()+200+(int)(Math.random()*40),(int)(Math.random()*40)); 
 					gp.sprites.add(p);
 					lines.add(p);			//(Math.random()*390), 30) 
 				
@@ -136,10 +144,10 @@ public class GameEngine implements KeyListener, GameReporter{
 		long sh = getScore();
 		sh = sh%100;
 
-		if( sh%10 > 5 || sh%10 == 7)
+		if((int)(Math.random()*10) == 3)
 			generateLine();
 		
-		if( sh%10 > 3 || sh%10 == 7)
+		if( (int)(Math.random()*10) == 3)
 			generateLine2();
 
 		if(Math.random() < difficulty){                       
@@ -149,14 +157,14 @@ public class GameEngine implements KeyListener, GameReporter{
 			generateShark();
 		}           
 		
-		if(getScore() == 1)
-				generateGoal();
 		
 		Iterator<Enemy> e_iter = enemies.iterator();
 		Iterator<Line> p_iter = lines.iterator();
 		Iterator<Line> w_iter = lines.iterator();
 		Iterator<Shark> s_iter = sharks.iterator();
 		Iterator<Goal> g_iter = goals.iterator();
+		Iterator<Bomb> b_iter = bombs.iterator();
+
 		while(e_iter.hasNext()){
 			Enemy e = e_iter.next();
 			e.proceed();
@@ -169,6 +177,22 @@ public class GameEngine implements KeyListener, GameReporter{
 		
 			
 		}
+
+
+		while(b_iter.hasNext()){
+			Bomb b = b_iter.next();
+			b.proceed();
+			
+			if(!b.isAlive()){
+				b_iter.remove();
+				gp.sprites.remove(b);
+				
+			}
+		
+			
+		}
+
+
 
 		while(g_iter.hasNext()){
 			Goal gg = g_iter.next();
@@ -221,7 +245,8 @@ public class GameEngine implements KeyListener, GameReporter{
 			}
 		}
 		
-
+		
+		
 
 
 		Rectangle2D.Double er;
@@ -238,40 +263,46 @@ public class GameEngine implements KeyListener, GameReporter{
 		
 		Rectangle2D.Double pr;
 		Rectangle2D.Double sr;
-
+		Rectangle2D.Double br;
 
 		for(Shark s : sharks){
 			sr = s.getRectangle();
 			if(sr.intersects(vr)){
-				die();											
-			}
+				die();
+				
 			
-
-			
-		}
-
-
-
-		// for(Line w : lines){
-		// 	wr = w.getRectangle();
-		// 	if(vr.intersects(wr)){
-		// 		v.moveLR(1);	
-		// 		score -= 10;									
-		// 	}
-			
-	
-			
-		// }
-	
-		for(Line p : lines){
-			pr = p.getRectangle();
-			if(pr.intersects(vr)){
-				v.moveLR(1);	
-				score -= 10;										
 			}
 
 			
+		
 		}
+
+		
+			for(Line p : lines){
+				pr = p.getRectangle();
+				if(pr.intersects(vr)){
+					v.moveLR(1);	
+					score -= 10;										
+				}
+				// else if(pr.intersects(sr)){
+				// 	gp.sprites.remove(s);											
+				// }
+				
+			
+				for(Bomb b : bombs){
+					br = b.getRectangle();
+					if(br.intersects(pr)){
+						
+						gp.sprites.remove(p);
+						gp.sprites.remove(b);
+																		
+					}
+
+				
+				}
+
+				
+			}
 
 		
 
@@ -306,7 +337,12 @@ public class GameEngine implements KeyListener, GameReporter{
 		 case KeyEvent.VK_X:
 		 	start();	
 		 	break;						//time play
-		 
+		 case KeyEvent.VK_Q:
+		 	generateBomb();	
+		 	break;	
+		 case KeyEvent.VK_G:
+		 	generateGoal();	
+		 	break;	
 		 
 		}
 	}
